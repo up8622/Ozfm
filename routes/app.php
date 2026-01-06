@@ -16,7 +16,80 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('/dashboard')
     ->name('dashboard.')
     ->middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])
-    ->group(function () {});
+    ->group(function () {
+        Route::get(
+            '/administrators',
+            App\Livewire\Dashboard\AdministratorIndex::class
+        )->name('administrators.index');
+
+        Route::get(
+            '/administrators/create',
+            App\Livewire\Dashboard\AdministratorCreate::class
+        )->name('administrators.create');
+
+        Route::get(
+            '/administrators/{administrator}',
+            App\Livewire\Dashboard\AdministratorEdit::class
+        )->name('administrators.edit');
+
+        Route::get('/uslugas', App\Livewire\Dashboard\UslugaIndex::class)->name(
+            'uslugas.index'
+        );
+
+        Route::get(
+            '/uslugas/create',
+            App\Livewire\Dashboard\UslugaCreate::class
+        )->name('uslugas.create');
+
+        Route::get(
+            '/uslugas/{usluga}',
+            App\Livewire\Dashboard\UslugaEdit::class
+        )->name('uslugas.edit');
+
+        Route::get(
+            '/pacijents',
+            App\Livewire\Dashboard\PacijentIndex::class
+        )->name('pacijents.index');
+
+        Route::get(
+            '/pacijents/create',
+            App\Livewire\Dashboard\PacijentCreate::class
+        )->name('pacijents.create');
+
+        Route::get(
+            '/pacijents/{pacijent}',
+            App\Livewire\Dashboard\PacijentEdit::class
+        )->name('pacijents.edit');
+
+        Route::get(
+            '/terapeuts',
+            App\Livewire\Dashboard\TerapeutIndex::class
+        )->name('terapeuts.index');
+
+        Route::get(
+            '/terapeuts/create',
+            App\Livewire\Dashboard\TerapeutCreate::class
+        )->name('terapeuts.create');
+
+        Route::get(
+            '/terapeuts/{terapeut}',
+            App\Livewire\Dashboard\TerapeutEdit::class
+        )->name('terapeuts.edit');
+
+        Route::get('/termins', App\Livewire\Dashboard\TerminIndex::class)->name(
+            'termins.index'
+        );
+
+        Route::get(
+            '/termins/create',
+            App\Livewire\Dashboard\TerminCreate::class
+        )->name('termins.create');
+
+        Route::get(
+            '/termins/{termin}',
+            App\Livewire\Dashboard\TerminEdit::class
+        )->name('termins.edit');
+    });
 
 // API
 Route::prefix('/api')
