@@ -30,6 +30,7 @@ class CreateForm extends Form
     {
         $this->validate();
 
+        $data['password_hash'] = Hash::make($this->password_hash);
         $terapeut = Terapeut::create($this->except([]));
 
         $this->reset();

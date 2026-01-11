@@ -23,10 +23,10 @@ class TerapeutFactory extends Factory
     public function definition(): array
     {
         return [
-            'ime' => fake()->text(255),
-            'prezime' => fake()->text(255),
-            'jmbg' => fake()->text(255),
-            'broj_telefona' => fake()->text(255),
+            'ime' => fake()->firstName(),
+            'prezime' => fake()->lastName(),
+            'jmbg' => fake()->numerify('#############'),
+            'broj_telefona' => fake()->phoneNumber(),
             'password_hash' => \Hash::make('password'),
             'username' => fake()->userName(),
         ];
