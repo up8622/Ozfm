@@ -108,7 +108,7 @@
 
         function editUsluga(id, naziv, cena) {
             document.getElementById('modalTitle').textContent = 'Edit Usluga';
-            document.getElementById('uslugaForm').action = '/usluga/' + id;
+            document.getElementById('uslugaForm').action = '/admin/usluga/' + id;
             document.getElementById('methodField').value = 'PUT';
             document.getElementById('uslugaId').value = id;
             document.getElementById('submitButton').textContent = 'Update Usluga';
@@ -123,7 +123,7 @@
 
         function confirmDelete(id, name) {
             document.getElementById('deleteName').textContent = name;
-            document.getElementById('deleteForm').action = '/usluga/' + id;
+            document.getElementById('deleteForm').action = '/admin/usluga/' + id;
             document.getElementById('deleteModal').classList.remove('hidden');
         }
 

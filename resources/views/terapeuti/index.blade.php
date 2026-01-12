@@ -116,7 +116,7 @@
 
         function editTerapeut(id, ime, prezime, jmbg, broj_telefona, username) {
             document.getElementById('modalTitle').textContent = 'Edit Terapeut';
-            document.getElementById('terapeutForm').action = '/terapeuti/' + id;
+            document.getElementById('terapeutForm').action = '/admin/terapeuti/' + id;
             document.getElementById('methodField').value = 'PUT';
             document.getElementById('terapeutId').value = id;
             document.getElementById('submitButton').textContent = 'Update Terapeut';
@@ -136,7 +136,7 @@
 
         function confirmDelete(id, name) {
             document.getElementById('deleteName').textContent = name;
-            document.getElementById('deleteForm').action = '/terapeuti/' + id;
+            document.getElementById('deleteForm').action = '/admin/terapeuti/' + id;
             document.getElementById('deleteModal').classList.remove('hidden');
         }
 

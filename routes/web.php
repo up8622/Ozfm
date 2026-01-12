@@ -8,17 +8,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/admin', function () {
+    return view('admin_view');
+});
+
 // Public therapists listing
-Route::get('/terapeuti', [TerapeutController::class, 'index'])->name('terapeuti.index');
-Route::post('/terapeuti', [TerapeutController::class, 'store'])->name('terapeuti.store');
-Route::put('/terapeuti/{terapeut}', [TerapeutController::class, 'update'])->name('terapeuti.update');
-Route::delete('/terapeuti/{terapeut}', [TerapeutController::class, 'destroy'])->name('terapeuti.destroy');
+Route::get('/admin/terapeuti', [TerapeutController::class, 'index'])->name('terapeuti.index');
+Route::post('/admin/terapeuti', [TerapeutController::class, 'store'])->name('terapeuti.store');
+Route::put('/admin/terapeuti/{terapeut}', [TerapeutController::class, 'update'])->name('terapeuti.update');
+Route::delete('/admin/terapeuti/{terapeut}', [TerapeutController::class, 'destroy'])->name('terapeuti.destroy');
 
 // Public usluga listing
-Route::get('/usluga', [UslugaController::class, 'index'])->name('usluga.index');
-Route::post('/usluga', [UslugaController::class, 'store'])->name('usluga.store');
-Route::put('/usluga/{usluga}', [UslugaController::class, 'update'])->name('usluga.update');
-Route::delete('/usluga/{usluga}', [UslugaController::class, 'destroy'])->name('usluga.destroy');
+Route::get('/admin/usluga', [UslugaController::class, 'index'])->name('usluga.index');
+Route::post('/admin/usluga', [UslugaController::class, 'store'])->name('usluga.store');
+Route::put('/admin/usluga/{usluga}', [UslugaController::class, 'update'])->name('usluga.update');
+Route::delete('/admin/usluga/{usluga}', [UslugaController::class, 'destroy'])->name('usluga.destroy');
 
 Route::middleware([
     'auth:sanctum',
