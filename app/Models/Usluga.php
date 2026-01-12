@@ -11,5 +11,8 @@ class Usluga extends Model
 
     protected $table = 'usluga';
 
-    protected $guarded = [];
+    protected $fillable = [
+        'naziv',
+        'cena',
+    ];
 }

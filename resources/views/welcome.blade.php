@@ -24,6 +24,8 @@
             @if (Route::has('login'))
                 <nav class="flex items-center justify-end gap-4">
                     <a href="{{ route('terapeuti.index') }}" class="inline-block px-5 py-1.5 text-[#1b1b18] border border-transparent hover:border-[#19140035] rounded-sm text-sm leading-normal">{{ __('Terapeuti') }}</a>
+                    <a href="{{ route('usluga.index') }}" class="inline-block px-5 py-1.5 text-[#1b1b18] border border-transparent hover:border-[#19140035] rounded-sm text-sm leading-normal">{{ __('Usluge') }}</a>
+
                     @auth
                         <a
                             href="{{ url('/dashboard') }}"
