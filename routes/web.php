@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TerapeutController;
 use App\Http\Controllers\UslugaController;
+use App\Http\Controllers\AdministratorController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,6 +24,10 @@ Route::get('/admin/usluga', [UslugaController::class, 'index'])->name('usluga.in
 Route::post('/admin/usluga', [UslugaController::class, 'store'])->name('usluga.store');
 Route::put('/admin/usluga/{usluga}', [UslugaController::class, 'update'])->name('usluga.update');
 Route::delete('/admin/usluga/{usluga}', [UslugaController::class, 'destroy'])->name('usluga.destroy');
+
+// Administrator login
+Route::post('/login', [AdministratorController::class, 'login'])->name('admin.login');
+Route::get('/logout', [AdministratorController::class, 'logout'])->name('admin.logout');
 
 Route::middleware([
     'auth:sanctum',

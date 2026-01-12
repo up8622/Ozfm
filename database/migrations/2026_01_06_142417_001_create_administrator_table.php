@@ -21,9 +21,9 @@ return new class extends Migration {
 
             $table->integer('godina_rodjenja');
 
-            $table->string('hash');
+            $table->string('hash')->nullable();
 
-            $table->string('salt');
+            $table->string('salt')->nullable();
 
             $table->string('username');
 

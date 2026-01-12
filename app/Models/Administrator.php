@@ -11,5 +11,5 @@ class Administrator extends Model
 
     protected $table = 'administrator';
 
-    protected $guarded = [];
+    protected $fillable = ['ime', 'prezime', 'godina_rodjenja', 'username', 'hash', 'salt'];
 }

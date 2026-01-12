@@ -25,5 +25,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             TerapeutSeeder::class,
         ]);
+
+        $this->call([
+            AdministratorSeeder::class,
+        ]);
     }
 }
