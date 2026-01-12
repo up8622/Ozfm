@@ -1,0 +1,66 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Terapeut;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+
+class TerapeutController extends Controller
+{
+    public function index()
+    {
+        $terapeuti = Terapeut::all();
+        return view('terapeuti.index', compact('terapeuti'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'ime' => 'required|string|max:255',
+            'prezime' => 'required|string|max:255',
+            'jmbg' => 'required|string|max:13|unique:terapeut,jmbg',
+            'broj_telefona' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:terapeut,username',
+            'password' => 'required|string|min:8',
+        ]);
+
+        Terapeut::create([
+            'ime' => $request->ime,
+            'prezime' => $request->prezime,
+            'jmbg' => $request->jmbg,
+            'broj_telefona' => $request->broj_telefona,
+            'username' => $request->username,
+            'password_hash' => Hash::make($request->password),
+        ]);
+
+        return redirect()->route('terapeuti.index')->with('success', 'Terapeut added successfully.');
+    }
+
+    public function update(Request $request, Terapeut $terapeut)
+    {
+        $request->validate([
+            'prezime' => 'required|string|max:255',
+            'jmbg' => 'required|string|max:13|unique:terapeut,jmbg,' . $terapeut->id,
+            'broj_telefona' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:terapeut,username,' . $terapeut->id,
+            'password' => 'nullable|string|min:8',
+        ]);
+
+        $data = [
+            'ime' => $request->ime,
+            'prezime' => $request->prezime,
+            'jmbg' => $request->jmbg,
+            'broj_telefona' => $request->broj_telefona,
+            'username' => $request->username,
+        ];
+
+        if ($request->filled('password')) {
+            $data['password_hash'] = Hash::make($request->password);
+        }
+
+        $terapeut->update($data);
+
+        return redirect()->route('terapeuti.index')->with('success', 'Terapeut updated successfully.');
+    }
+}

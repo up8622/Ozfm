@@ -11,5 +11,12 @@ class Terapeut extends Model
 
     protected $table = 'terapeut';
 
-    protected $guarded = [];
+    protected $fillable = [
+        'ime',
+        'prezime',
+        'jmbg',
+        'broj_telefona',
+        'username',
+        'password_hash',
+    ];
 }

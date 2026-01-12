@@ -1,17 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TerapeutController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 // Public therapists listing
-Route::get('/terapeuti', function () {
-    $terapeuti = App\Models\Terapeut::all();
-
-    return view('terapeuti.index', compact('terapeuti'));
-})->name('terapeuti.index');
+Route::get('/terapeuti', [TerapeutController::class, 'index'])->name('terapeuti.index');
+Route::post('/terapeuti', [TerapeutController::class, 'store'])->name('terapeuti.store');
+Route::put('/terapeuti/{terapeut}', [TerapeutController::class, 'update'])->name('terapeuti.update');
 
 Route::middleware([
     'auth:sanctum',
