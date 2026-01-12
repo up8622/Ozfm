@@ -63,4 +63,11 @@ class TerapeutController extends Controller
 
         return redirect()->route('terapeuti.index')->with('success', 'Terapeut updated successfully.');
     }
+
+    public function destroy(Terapeut $terapeut)
+    {
+        $terapeut->delete();
+
+        return redirect()->route('terapeuti.index')->with('success', 'Terapeut deleted successfully.');
+    }
 }

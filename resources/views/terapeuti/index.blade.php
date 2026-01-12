@@ -35,8 +35,11 @@
                             <td class="px-6 py-4 whitespace-nowrap">{{ $terapeut->broj_telefona }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $terapeut->username }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <button type="button" class="text-blue-600 hover:text-blue-900" onclick="editTerapeut({{ $terapeut->id }}, '{{ $terapeut->ime }}', '{{ $terapeut->prezime }}', '{{ $terapeut->jmbg }}', '{{ $terapeut->broj_telefona }}', '{{ $terapeut->username }}')">
+                                <button type="button" class="text-blue-600 hover:text-blue-900 mr-2" onclick="editTerapeut({{ $terapeut->id }}, '{{ $terapeut->ime }}', '{{ $terapeut->prezime }}', '{{ $terapeut->jmbg }}', '{{ $terapeut->broj_telefona }}', '{{ $terapeut->username }}')">
                                     Edit
+                                </button>
+                                <button type="button" class="text-red-600 hover:text-red-900" onclick="confirmDelete({{ $terapeut->id }}, '{{ $terapeut->ime }} {{ $terapeut->prezime }}')">
+                                    Delete
                                 </button>
                             </td>
                         </tr>
@@ -130,5 +133,33 @@
         function closeModal() {
             document.getElementById('terapeutModal').classList.add('hidden');
         }
+
+        function confirmDelete(id, name) {
+            document.getElementById('deleteName').textContent = name;
+            document.getElementById('deleteForm').action = '/terapeuti/' + id;
+            document.getElementById('deleteModal').classList.remove('hidden');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.add('hidden');
+        }
     </script>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Delete Terapeut</h3>
+                <p class="text-sm text-gray-500 mb-4">Are you sure you want to delete <span id="deleteName"></span>? This action cannot be undone.</p>
+                <form id="deleteForm" action="" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <div class="flex justify-end">
+                        <button type="button" class="mr-3 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded" onclick="closeDeleteModal()">Cancel</button>
+                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </x-layouts.app>

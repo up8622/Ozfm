@@ -11,6 +11,7 @@ Route::get('/', function () {
 Route::get('/terapeuti', [TerapeutController::class, 'index'])->name('terapeuti.index');
 Route::post('/terapeuti', [TerapeutController::class, 'store'])->name('terapeuti.store');
 Route::put('/terapeuti/{terapeut}', [TerapeutController::class, 'update'])->name('terapeuti.update');
+Route::delete('/terapeuti/{terapeut}', [TerapeutController::class, 'destroy'])->name('terapeuti.destroy');
 
 Route::middleware([
     'auth:sanctum',
