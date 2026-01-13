@@ -12,4 +12,9 @@ class Pacijent extends Model
     protected $table = 'pacijent';
 
     protected $guarded = [];
+
+    public function termins()
+    {
+        return $this->hasMany(Termin::class);
+    }
 }
