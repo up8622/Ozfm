@@ -50,6 +50,13 @@ Route::middleware('pacijent.auth')->group(function () {
 Route::get('/pacijent/register', [PacijentController::class, 'showRegisterForm'])->name('pacijent.register');
 Route::post('/pacijent/register', [PacijentController::class, 'register'])->name('pacijent.register.store');
 
+// Terapeut routes
+Route::middleware('terapeut.auth')->group(function () {
+    Route::get('/terapeut/tretmani', [TerapeutController::class, 'tretmani'])->name('terapeut.tretmani');
+});
+
+Route::get('/terapeut/logout', [TerapeutController::class, 'logout'])->name('terapeut.logout');
+
 
 
 

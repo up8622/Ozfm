@@ -23,6 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin.auth' => \App\Http\Middleware\AdminAuth::class,
             'pacijent.auth' => \App\Http\Middleware\PacijentAuth::class,
+            'terapeut.auth' => \App\Http\Middleware\TerapeutAuth::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

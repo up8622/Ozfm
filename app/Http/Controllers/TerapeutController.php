@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Terapeut;
+use App\Models\Termin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -69,6 +70,25 @@ class TerapeutController extends Controller
         $terapeut->delete();
 
         return redirect()->route('terapeuti.index')->with('success', 'Terapeut deleted successfully.');
+    }
+
+    /**
+     * Show all tretmani (termins) for the logged-in terapeut
+     */
+    public function tretmani()
+    {
+        $terapeutId = session('terapeut_id');
+        
+        if (!$terapeutId) {
+            return redirect('/')->withErrors(['login' => 'Please log in as terapeut to access this page.']);
+        }
+
+        $termins = Termin::where('terapeut_id', $terapeutId)
+            ->with(['pacijent', 'usluga'])
+            ->orderBy('vreme', 'asc')
+            ->get();
+
+        return view('terapeut.tretmani', compact('termins'));
     }
 
     /**
