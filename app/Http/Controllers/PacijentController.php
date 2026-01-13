@@ -82,4 +82,38 @@ class PacijentController extends Controller
 
         return redirect()->route('pacijent.termini')->with('success', 'Termin added successfully.');
     }
+
+    /**
+     * Show the pacijent registration form
+     */
+    public function showRegisterForm()
+    {
+        return view('pacijent.register');
+    }
+
+    /**
+     * Register a new pacijent
+     */
+    public function register(Request $request)
+    {
+        $request->validate([
+            'ime' => 'required|string|max:255',
+            'prezime' => 'required|string|max:255',
+            'godina_rodjenja' => 'required|integer|min:1900|max:' . (date('Y') - 18),
+            'broj_telefona' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:pacijent,username',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        Pacijent::create([
+            'ime' => $request->ime,
+            'prezime' => $request->prezime,
+            'godina_rodjenja' => $request->godina_rodjenja,
+            'broj_telefona' => $request->broj_telefona,
+            'username' => $request->username,
+            'password_hash' => Hash::make($request->password),
+        ]);
+
+        return redirect('/')->with('success', 'Registration successful! Please login.');
+    }
 }

@@ -36,36 +36,53 @@
         </div>
 
         <div class="w-full lg:max-w-md max-w-sm">
-            <h1 class="text-3xl font-bold mb-8 text-center">Login</h1>
+            <h1 class="text-3xl font-bold mb-8 text-center">Register as Pacijent</h1>
             
-            @if ($errors->has('login'))
+            @if ($errors->any())
                 <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-                    {{ $errors->first('login') }}
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('admin.login') }}" class="bg-white p-8 rounded-lg shadow-[0_0_20px_rgba(0,0,0,0.15)]">
+            <form method="POST" action="{{ route('pacijent.register.store') }}" class="bg-white p-8 rounded-lg shadow-[0_0_20px_rgba(0,0,0,0.15)]">
                 @csrf
-                <input type="hidden" name="user_type" id="user_type" value="admin">
+                <div class="mb-6">
+                    <label for="ime" class="block text-sm font-medium text-gray-700 mb-2">Ime</label>
+                    <input type="text" name="ime" id="ime" value="{{ old('ime') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div class="mb-6">
+                    <label for="prezime" class="block text-sm font-medium text-gray-700 mb-2">Prezime</label>
+                    <input type="text" name="prezime" id="prezime" value="{{ old('prezime') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div class="mb-6">
+                    <label for="godina_rodjenja" class="block text-sm font-medium text-gray-700 mb-2">Godina rođenja</label>
+                    <input type="number" name="godina_rodjenja" id="godina_rodjenja" value="{{ old('godina_rodjenja') }}" min="1900" max="{{ date('Y') - 18 }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div class="mb-6">
+                    <label for="broj_telefona" class="block text-sm font-medium text-gray-700 mb-2">Broj telefona</label>
+                    <input type="text" name="broj_telefona" id="broj_telefona" value="{{ old('broj_telefona') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
                 <div class="mb-6">
                     <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
                     <input type="text" name="username" id="username" value="{{ old('username') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                    @error('username')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
                 </div>
                 <div class="mb-6">
                     <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
                     <input type="password" name="password" id="password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                    @error('password')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
                 </div>
-                <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 font-medium transition">Login</button>
+                <div class="mb-6">
+                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+                    <input type="password" name="password_confirmation" id="password_confirmation" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 font-medium transition">Register</button>
             </form>
             
             <div class="mt-4 text-center">
-                <a href="{{ route('pacijent.register') }}" class="text-sm text-blue-600 hover:text-blue-800">Register as a pacijent</a>
+                <a href="{{ route('login') }}" class="text-sm text-blue-600 hover:text-blue-800">Already have an account? Login</a>
             </div>
         </div>
     </body>
