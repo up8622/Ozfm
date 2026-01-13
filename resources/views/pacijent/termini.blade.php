@@ -25,6 +25,7 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Broj telefona</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usluga</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cena</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -35,10 +36,17 @@
                             <td class="px-6 py-4 whitespace-nowrap">{{ $termin->terapeut->broj_telefona }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $termin->usluga->naziv }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $termin->usluga->cena }} RSD</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <form action="{{ route('pacijent.termini.destroy', $termin) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this termin?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
+                                </form>
+                            </td>
                         </tr>
                         @empty
                         <tr>
-                            <td class="px-6 py-4" colspan="5">No termins found.</td>
+                            <td class="px-6 py-4" colspan="6">No termins found.</td>
                         </tr>
                         @endforelse
                     </tbody>

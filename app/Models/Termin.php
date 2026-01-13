@@ -13,6 +13,10 @@ class Termin extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'vreme' => 'datetime',
+    ];
+
     public function pacijent()
     {
         return $this->belongsTo(Pacijent::class);

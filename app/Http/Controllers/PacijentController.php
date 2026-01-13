@@ -8,6 +8,7 @@ use App\Models\Terapeut;
 use App\Models\Usluga;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class PacijentController extends Controller
 {
@@ -74,13 +75,28 @@ class PacijentController extends Controller
         }
 
         Termin::create([
-            'vreme' => $request->vreme,
+            'vreme' => Carbon::parse($request->vreme),
             'pacijent_id' => $pacijentId,
             'terapeut_id' => $request->terapeut_id,
             'usluga_id' => $request->usluga_id,
         ]);
 
         return redirect()->route('pacijent.termini')->with('success', 'Termin added successfully.');
+    }
+
+    /**
+     * Delete a termin
+     */
+    public function destroyTermin(Termin $termin)
+    {
+        // Check if the termin belongs to the logged-in pacijent
+        if ($termin->pacijent_id !== session('pacijent_id')) {
+            return redirect()->route('pacijent.termini')->withErrors('You can only delete your own termins.');
+        }
+
+        $termin->delete();
+
+        return redirect()->route('pacijent.termini')->with('success', 'Termin deleted successfully.');
     }
 
     /**

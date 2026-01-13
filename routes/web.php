@@ -36,6 +36,7 @@ Route::get('/terapeut/logout', [TerapeutController::class, 'logout'])->name('adm
 // Pacijent routes
 Route::get('/pacijent/termini', [PacijentController::class, 'termini'])->name('pacijent.termini');
 Route::post('/pacijent/termini', [PacijentController::class, 'storeTermin'])->name('pacijent.termini.store');
+Route::delete('/pacijent/termini/{termin}', [PacijentController::class, 'destroyTermin'])->name('pacijent.termini.destroy');
 Route::get('/pacijent/register', [PacijentController::class, 'showRegisterForm'])->name('pacijent.register');
 Route::post('/pacijent/register', [PacijentController::class, 'register'])->name('pacijent.register.store');
 
