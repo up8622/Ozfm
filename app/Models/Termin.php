@@ -12,4 +12,19 @@ class Termin extends Model
     protected $table = 'termin';
 
     protected $guarded = [];
+
+    public function pacijent()
+    {
+        return $this->belongsTo(Pacijent::class);
+    }
+
+    public function terapeut()
+    {
+        return $this->belongsTo(Terapeut::class);
+    }
+
+    public function usluga()
+    {
+        return $this->belongsTo(Usluga::class);
+    }
 }

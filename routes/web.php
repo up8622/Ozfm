@@ -5,7 +5,7 @@ use App\Http\Controllers\TerapeutController;
 use App\Http\Controllers\UslugaController;
 use App\Http\Controllers\AdministratorController;
 use App\Http\Controllers\Controller;
-
+use App\Http\Controllers\PacijentController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,9 +27,15 @@ Route::post('/admin/usluga', [UslugaController::class, 'store'])->name('usluga.s
 Route::put('/admin/usluga/{usluga}', [UslugaController::class, 'update'])->name('usluga.update');
 Route::delete('/admin/usluga/{usluga}', [UslugaController::class, 'destroy'])->name('usluga.destroy');
 
-// Administrator login
+// Login 
 Route::post('/login', [Controller::class, 'handle_multiple_login'])->name('admin.login');
 Route::get('/admin/logout', [AdministratorController::class, 'logout'])->name('admin.logout');
+Route::get('/pacijent/logout', [PacijentController::class, 'logout'])->name('admin.logout');
+Route::get('/terapeut/logout', [TerapeutController::class, 'logout'])->name('admin.logout');
+
+// Pacijent routes
+Route::get('/pacijent/termini', [PacijentController::class, 'termini'])->name('pacijent.termini');
+Route::post('/pacijent/termini', [PacijentController::class, 'storeTermin'])->name('pacijent.termini.store');
 
 
 

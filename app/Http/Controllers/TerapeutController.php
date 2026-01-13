@@ -87,7 +87,7 @@ class TerapeutController extends Controller
             // Store terapeut info in session
             session(['terapeut_id' => $terapeut->id, 'terapeut_name' => $terapeut->ime . ' ' . $terapeut->prezime]);
             
-            return redirect('/admin')->with('success', 'Logged in successfully');
+            return redirect('/terapeut')->with('success', 'Logged in successfully');
         }
 
         return back()->withErrors(['/login' => 'Invalid username or password']);
