@@ -1,6 +1,12 @@
 <x-layouts.app>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('Admin View') }}</h2>
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('Admin View') }}</h2>
+            <a href="{{ route('admin.logout') }}"
+               class="inline-block px-4 py-2 bg-red-500 hover:bg-red-700 text-white font-bold rounded-md text-sm leading-normal">
+                {{ __('Logout') }}
+            </a>
+        </div>
     </x-slot>
 
     <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">

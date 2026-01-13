@@ -28,7 +28,7 @@ class PacijentController extends Controller
             // Store pacijent info in session
             session(['pacijent_id' => $pacijent->id, 'pacijent_name' => $pacijent->ime . ' ' . $pacijent->prezime]);
             
-            return redirect('/pacijent')->with('success', 'Logged in successfully');
+            return redirect('/pacijent/termini')->with('success', 'Logged in successfully');
         }
 
         return back()->withErrors(['/login' => 'Invalid username or password']);

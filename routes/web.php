@@ -11,32 +11,42 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/admin', function () {
-    return view('admin_view');
+// Login
+Route::post('/login', [Controller::class, 'handle_multiple_login'])->name('admin.login');
+
+Route::middleware('admin.auth')->group(function () {
+    Route::get('/admin', function () {
+        return view('admin_view');
+    });
+
+    // Admin terapeut management
+    Route::get('/admin/terapeuti', [TerapeutController::class, 'index'])->name('terapeuti.index');
+    Route::post('/admin/terapeuti', [TerapeutController::class, 'store'])->name('terapeuti.store');
+    Route::put('/admin/terapeuti/{terapeut}', [TerapeutController::class, 'update'])->name('terapeuti.update');
+    Route::delete('/admin/terapeuti/{terapeut}', [TerapeutController::class, 'destroy'])->name('terapeuti.destroy');
+
+    // Admin usluga management
+    Route::get('/admin/usluga', [UslugaController::class, 'index'])->name('usluga.index');
+    Route::post('/admin/usluga', [UslugaController::class, 'store'])->name('usluga.store');
+    Route::put('/admin/usluga/{usluga}', [UslugaController::class, 'update'])->name('usluga.update');
+    Route::delete('/admin/usluga/{usluga}', [UslugaController::class, 'destroy'])->name('usluga.destroy');
+
+    // Admin logout
+    Route::get('/admin/logout', [AdministratorController::class, 'logout'])->name('admin.logout');
 });
 
-// Public therapists listing
-Route::get('/admin/terapeuti', [TerapeutController::class, 'index'])->name('terapeuti.index');
-Route::post('/admin/terapeuti', [TerapeutController::class, 'store'])->name('terapeuti.store');
-Route::put('/admin/terapeuti/{terapeut}', [TerapeutController::class, 'update'])->name('terapeuti.update');
-Route::delete('/admin/terapeuti/{terapeut}', [TerapeutController::class, 'destroy'])->name('terapeuti.destroy');
-
-// Public usluga listing
-Route::get('/admin/usluga', [UslugaController::class, 'index'])->name('usluga.index');
-Route::post('/admin/usluga', [UslugaController::class, 'store'])->name('usluga.store');
-Route::put('/admin/usluga/{usluga}', [UslugaController::class, 'update'])->name('usluga.update');
-Route::delete('/admin/usluga/{usluga}', [UslugaController::class, 'destroy'])->name('usluga.destroy');
-
-// Login 
-Route::post('/login', [Controller::class, 'handle_multiple_login'])->name('admin.login');
-Route::get('/admin/logout', [AdministratorController::class, 'logout'])->name('admin.logout');
-Route::get('/pacijent/logout', [PacijentController::class, 'logout'])->name('admin.logout');
 Route::get('/terapeut/logout', [TerapeutController::class, 'logout'])->name('admin.logout');
 
 // Pacijent routes
-Route::get('/pacijent/termini', [PacijentController::class, 'termini'])->name('pacijent.termini');
-Route::post('/pacijent/termini', [PacijentController::class, 'storeTermin'])->name('pacijent.termini.store');
-Route::delete('/pacijent/termini/{termin}', [PacijentController::class, 'destroyTermin'])->name('pacijent.termini.destroy');
+Route::middleware('pacijent.auth')->group(function () {
+    Route::get('/pacijent/termini', [PacijentController::class, 'termini'])->name('pacijent.termini');
+    Route::post('/pacijent/termini', [PacijentController::class, 'storeTermin'])->name('pacijent.termini.store');
+    Route::delete('/pacijent/termini/{termin}', [PacijentController::class, 'destroyTermin'])->name('pacijent.termini.destroy');
+
+    Route::get('/pacijent/logout', [PacijentController::class, 'logout'])->name('pacijent.logout');
+});
+
+// Public pacijent registration routes
 Route::get('/pacijent/register', [PacijentController::class, 'showRegisterForm'])->name('pacijent.register');
 Route::post('/pacijent/register', [PacijentController::class, 'register'])->name('pacijent.register.store');
 

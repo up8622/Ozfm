@@ -2,9 +2,15 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('Termini') }}</h2>
-            <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="openAddModal()">
-                Dodaj termin
-            </button>
+            <div class="flex items-center space-x-4">
+                <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="openAddModal()">
+                    Dodaj termin
+                </button>
+                <a href="{{ route('pacijent.logout') }}"
+                   class="inline-block px-4 py-2 bg-red-500 hover:bg-red-700 text-white font-bold rounded-md text-sm leading-normal">
+                    {{ __('Logout') }}
+                </a>
+            </div>
         </div>
     </x-slot>
 
@@ -37,11 +43,9 @@
                             <td class="px-6 py-4 whitespace-nowrap">{{ $termin->usluga->naziv }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $termin->usluga->cena }} RSD</td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <form action="{{ route('pacijent.termini.destroy', $termin) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this termin?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
-                                </form>
+                                <button type="button" class="text-red-600 hover:text-red-900" onclick="confirmDelete({{ $termin->id }}, '{{ $termin->vreme->format('d.m.Y H:i') }} - {{ $termin->terapeut->ime }} {{ $termin->terapeut->prezime }}')">
+                                    Delete
+                                </button>
                             </td>
                         </tr>
                         @empty
@@ -93,6 +97,24 @@
         </div>
     </div>
 
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Delete Termin</h3>
+                <p class="text-sm text-gray-500 mb-4">Are you sure you want to delete <span id="deleteName"></span>? This action cannot be undone.</p>
+                <form id="deleteForm" action="" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <div class="flex justify-end">
+                        <button type="button" class="mr-3 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded" onclick="closeDeleteModal()">Cancel</button>
+                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
         function openAddModal() {
             document.getElementById('terminModal').classList.remove('hidden');
@@ -100,6 +122,16 @@
 
         function closeModal() {
             document.getElementById('terminModal').classList.add('hidden');
+        }
+
+        function confirmDelete(id, name) {
+            document.getElementById('deleteName').textContent = name;
+            document.getElementById('deleteForm').action = '{{ route("pacijent.termini") }}/' + id;
+            document.getElementById('deleteModal').classList.remove('hidden');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.add('hidden');
         }
     </script>
 </x-layouts.app>
