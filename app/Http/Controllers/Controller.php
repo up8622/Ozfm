@@ -8,7 +8,7 @@ use App\Http\Controllers\TerapeutController;
 use App\Http\Controllers\PacijentController;
 
 
-abstract class Controller       
+class Controller       
 {
     public function handle_multiple_login(Request $request)
     {

@@ -70,4 +70,36 @@ class TerapeutController extends Controller
 
         return redirect()->route('terapeuti.index')->with('success', 'Terapeut deleted successfully.');
     }
+
+    /**
+     * Handle terapeut login
+     */
+    public function login(Request $request)
+    {
+        $request->validate([
+            'username' => 'required|string',
+            'password' => 'required|string',
+        ]);
+
+        $terapeut = Terapeut::where('username', $request->input('username'))->first();
+        
+        if ($terapeut && Hash::check($request->input('password'), $terapeut->password_hash)) {
+            // Store terapeut info in session
+            session(['terapeut_id' => $terapeut->id, 'terapeut_name' => $terapeut->ime . ' ' . $terapeut->prezime]);
+            
+            return redirect('/admin')->with('success', 'Logged in successfully');
+        }
+
+        return back()->withErrors(['/login' => 'Invalid username or password']);
+    }
+
+    /**
+     * Logout terapeut
+     */
+    public function logout(Request $request)
+    {
+        session()->forget(['terapeut_id', 'terapeut_name']);
+        
+        return redirect('/')->with('success', 'Logged out successfully');
+    }
 }
