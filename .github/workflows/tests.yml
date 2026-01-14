@@ -36,11 +36,11 @@ jobs:
     - name: Install Composer dependencies
       run: composer install --no-interaction --prefer-dist --no-progress
 
-    # - name: Copy environment file
-    #   run: cp .env.ci .env
+    - name: Copy environment file
+      run: cp .env.ci .env
 
-    # - name: Generate application key
-    #   run: php artisan key:generate
+    - name: Generate application key
+      run: php artisan key:generate
 
     - name: Wait for MySQL
       run: |
