@@ -35,8 +35,6 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/admin/logout', [AdministratorController::class, 'logout'])->name('admin.logout');
 });
 
-Route::get('/terapeut/logout', [TerapeutController::class, 'logout'])->name('admin.logout');
-
 // Pacijent routes
 Route::middleware('pacijent.auth')->group(function () {
     Route::get('/pacijent/termini', [PacijentController::class, 'termini'])->name('pacijent.termini');
