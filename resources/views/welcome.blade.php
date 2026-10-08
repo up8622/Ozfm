@@ -20,19 +20,20 @@
         @endif
     </head>
     <body class="bg-[#FDFDFC] text-[#1b1b18] flex p-6 lg:p-8 items-center lg:justify-center min-h-screen flex-col" style="background: rgb(255, 255, 255)">
+        @php
+            $userTypes = ['admin' => 'Admin', 'pacijent' => 'Pacijent', 'terapeut' => 'Terapeut'];
+            $oldUserType = old('user_type');
+            $selectedUserType = is_string($oldUserType) && isset($userTypes[$oldUserType]) ? $oldUserType : 'admin';
+        @endphp
+
         <div class="absolute top-6 right-6 flex gap-2">
-            <button class="toggle-btn px-4 py-2 rounded-lg border transition"
-                    data-id="1">
-                Admin
-            </button>
-            <button class="toggle-btn px-4 py-2 rounded-lg border transition"
-                    data-id="2">
-                Pacijent
-            </button>
-            <button class="toggle-btn px-4 py-2 rounded-lg border transition"
-                data-id="3">
-                Terapeut
-            </button>
+            @foreach ($userTypes as $type => $label)
+                <button type="button"
+                        class="toggle-btn px-4 py-2 rounded-lg border transition {{ $type === $selectedUserType ? 'bg-blue-500 text-white shadow-md border-blue-500' : 'bg-white text-gray-700' }}"
+                        data-id="{{ $loop->iteration }}">
+                    {{ $label }}
+                </button>
+            @endforeach
         </div>
 
         <div class="w-full lg:max-w-md max-w-sm">
@@ -46,7 +47,7 @@
 
             <form method="POST" action="{{ route('admin.login') }}" class="bg-white p-8 rounded-lg shadow-[0_0_20px_rgba(0,0,0,0.15)]">
                 @csrf
-                <input type="hidden" name="user_type" id="user_type" value="admin">
+                <input type="hidden" name="user_type" id="user_type" value="{{ $selectedUserType }}">
                 <div class="mb-6">
                     <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
                     <input type="text" name="username" id="username" value="{{ old('username') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>

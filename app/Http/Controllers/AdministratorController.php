@@ -29,7 +29,7 @@ class AdministratorController extends Controller
             return redirect('/admin')->with('success', 'Logged in successfully');
         }
 
-        return back()->withErrors(['/login' => 'Invalid username or password']);
+        return back()->withErrors(['login' => 'Invalid username or password'])->onlyInput('username', 'user_type');
     }
 
     /**

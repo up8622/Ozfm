@@ -28,6 +28,6 @@ class Controller
             return app(PacijentController::class)->login($request);
         }
 
-        return back()->withErrors(['/login' => 'Invalid username or password']);
+        return back()->withErrors(['login' => 'Invalid username or password'])->onlyInput('username', 'user_type');
     }
 }
