@@ -31,4 +31,18 @@ document.addEventListener('DOMContentLoaded', () => {
             userTypeInput.value = button.textContent.trim().toLowerCase();
         });
     });
+
+    // Login stranica: izbor tipa korisnika (stil zavisi od aria-pressed)
+    const userTypeButtons = document.querySelectorAll('.user-type-btn');
+
+    userTypeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            userTypeButtons.forEach(btn => btn.setAttribute('aria-pressed', 'false'));
+            button.setAttribute('aria-pressed', 'true');
+
+            if (userTypeInput) {
+                userTypeInput.value = button.dataset.userType;
+            }
+        });
+    });
 });
