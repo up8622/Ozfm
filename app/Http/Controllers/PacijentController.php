@@ -7,6 +7,7 @@ use App\Models\Termin;
 use App\Models\Terapeut;
 use App\Models\Usluga;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 
@@ -74,12 +75,33 @@ class PacijentController extends Controller
             return redirect()->route('pacijent.termini')->withErrors('Pacijent not logged in.');
         }
 
-        Termin::create([
-            'vreme' => Carbon::parse($request->vreme),
-            'pacijent_id' => $pacijentId,
-            'terapeut_id' => $request->terapeut_id,
-            'usluga_id' => $request->usluga_id,
-        ]);
+        $vreme = Carbon::parse($request->vreme);
+
+        $greska = DB::transaction(function () use ($request, $pacijentId, $vreme) {
+            Terapeut::whereKey($request->terapeut_id)->lockForUpdate()->first();
+            Pacijent::whereKey($pacijentId)->lockForUpdate()->first();
+
+            if (Termin::where('terapeut_id', $request->terapeut_id)->preklapaSe($vreme)->exists()) {
+                return 'Izabrani terapeut već ima zakazan termin u tom periodu. Tretman traje 1h, izaberite drugo vreme.';
+            }
+
+            if (Termin::where('pacijent_id', $pacijentId)->preklapaSe($vreme)->exists()) {
+                return 'Već imate zakazan termin u tom periodu. Tretman traje 1h, izaberite drugo vreme.';
+            }
+
+            Termin::create([
+                'vreme' => $vreme,
+                'pacijent_id' => $pacijentId,
+                'terapeut_id' => $request->terapeut_id,
+                'usluga_id' => $request->usluga_id,
+            ]);
+
+            return null;
+        });
+
+        if ($greska) {
+            return redirect()->route('pacijent.termini')->withErrors(['vreme' => $greska])->withInput();
+        }
 
         return redirect()->route('pacijent.termini')->with('success', 'Termin added successfully.');
     }

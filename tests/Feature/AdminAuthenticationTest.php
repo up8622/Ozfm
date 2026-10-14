@@ -55,7 +55,7 @@ class AdminAuthenticationTest extends TestCase
         $response = $this->withoutMiddleware()->post(route('admin.login'), $loginData);
 
         $response->assertRedirect('/');
-        $response->assertSessionHasErrors('/login');
+        $response->assertSessionHasErrors('login');
         $this->assertNull(session('admin_id'));
     }
 

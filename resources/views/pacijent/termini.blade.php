@@ -21,6 +21,12 @@
             </div>
         @endif
 
+        @if ($errors->any() && ! $errors->hasAny(['vreme', 'terapeut_id', 'usluga_id']))
+            <div class="mb-4 rounded-md border border-red-300 bg-red-100 px-4 py-3 text-sm font-semibold text-red-700">
+                {{ $errors->first() }}
+            </div>
+        @endif
+
         <div class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-100 text-sm">
@@ -68,14 +74,17 @@
                     @csrf
                     <div class="mb-4">
                         <label for="vreme" class="mb-1.5 block text-[11px] font-semibold uppercase tracking-wide text-gray-600">Vreme</label>
-                        <input type="datetime-local" id="vreme" name="vreme" class="block w-full rounded-md border-gray-200 px-3 py-2 text-sm shadow-none focus:border-sky-500 focus:ring-sky-500" required>
+                        <input type="datetime-local" id="vreme" name="vreme" value="{{ old('vreme') }}" class="block w-full rounded-md border-gray-200 px-3 py-2 text-sm shadow-none focus:border-sky-500 focus:ring-sky-500" required>
+                        @error('vreme')
+                            <p class="mt-1.5 text-xs font-medium text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="mb-4">
                         <label for="terapeut_id" class="mb-1.5 block text-[11px] font-semibold uppercase tracking-wide text-gray-600">Terapeut</label>
                         <select id="terapeut_id" name="terapeut_id" class="block w-full rounded-md border-gray-200 py-2 pl-3 pr-10 text-sm text-gray-700 shadow-none focus:border-sky-500 focus:ring-sky-500" required>
                             <option value="">Izaberite terapeuta</option>
                             @foreach($terapeuti as $terapeut)
-                            <option value="{{ $terapeut->id }}">{{ $terapeut->ime }} {{ $terapeut->prezime }}</option>
+                            <option value="{{ $terapeut->id }}" @selected(old('terapeut_id') == $terapeut->id)>{{ $terapeut->ime }} {{ $terapeut->prezime }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -84,7 +93,7 @@
                         <select id="usluga_id" name="usluga_id" class="block w-full rounded-md border-gray-200 py-2 pl-3 pr-10 text-sm text-gray-700 shadow-none focus:border-sky-500 focus:ring-sky-500" required>
                             <option value="">Izaberite uslugu</option>
                             @foreach($usluge as $usluga)
-                            <option value="{{ $usluga->id }}">{{ $usluga->naziv }} - {{ $usluga->cena }} RSD</option>
+                            <option value="{{ $usluga->id }}" @selected(old('usluga_id') == $usluga->id)>{{ $usluga->naziv }} - {{ $usluga->cena }} RSD</option>
                             @endforeach
                         </select>
                     </div>
@@ -133,5 +142,9 @@
         function closeDeleteModal() {
             document.getElementById('deleteModal').classList.add('hidden');
         }
+
+        @if ($errors->hasAny(['vreme', 'terapeut_id', 'usluga_id']))
+            openAddModal();
+        @endif
     </script>
 </x-layouts.app>
