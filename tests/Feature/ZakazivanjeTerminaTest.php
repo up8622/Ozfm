@@ -6,6 +6,7 @@ use App\Models\Pacijent;
 use App\Models\Terapeut;
 use App\Models\Termin;
 use App\Models\Usluga;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -23,6 +24,9 @@ class ZakazivanjeTerminaTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->travelTo(Carbon::parse('2026-11-01 12:00', 'Europe/Belgrade'));
+        config(['ordinacija.otvara' => 7, 'ordinacija.zatvara' => 24, 'ordinacija.vremenska_zona' => 'Europe/Belgrade']);
 
         $this->pacijent = Pacijent::factory()->create();
         $this->drugiPacijent = Pacijent::factory()->create();
@@ -117,6 +121,49 @@ class ZakazivanjeTerminaTest extends TestCase
         Termin::first()->delete();
 
         $this->zakazi($this->drugiPacijent, $this->terapeut, '2026-11-02T10:00')
+            ->assertSessionHasNoErrors();
+
+        $this->assertDatabaseCount('termin', 1);
+    }
+
+    #[Test]
+    public function termin_ne_moze_da_se_zakaze_u_proslosti()
+    {
+        $this->zakazi($this->pacijent, $this->terapeut, '2026-10-31T10:00')
+            ->assertSessionHasErrors('vreme');
+        $this->zakazi($this->pacijent, $this->terapeut, '2026-11-01T11:59')
+            ->assertSessionHasErrors('vreme');
+        $this->zakazi($this->pacijent, $this->terapeut, '2026-11-01T13:00')
+            ->assertSessionHasNoErrors();
+
+        $this->assertDatabaseCount('termin', 1);
+    }
+
+    #[Test]
+    public function termin_mora_da_pocne_i_zavrsi_se_u_radnom_vremenu()
+    {
+        $this->zakazi($this->pacijent, $this->terapeut, '2026-11-02T06:59')
+            ->assertSessionHasErrors('vreme');
+        $this->zakazi($this->pacijent, $this->terapeut, '2026-11-02T23:01')
+            ->assertSessionHasErrors('vreme');
+        $this->zakazi($this->pacijent, $this->terapeut, '2026-11-02T07:00')
+            ->assertSessionHasNoErrors();
+        $this->zakazi($this->pacijent, $this->terapeut, '2026-11-02T23:00')
+            ->assertSessionHasNoErrors();
+
+        $this->assertDatabaseCount('termin', 2);
+    }
+
+    #[Test]
+    public function radno_vreme_se_cita_iz_konfiguracije()
+    {
+        config(['ordinacija.otvara' => 9, 'ordinacija.zatvara' => 17]);
+
+        $this->zakazi($this->pacijent, $this->terapeut, '2026-11-02T08:00')
+            ->assertSessionHasErrors('vreme');
+        $this->zakazi($this->pacijent, $this->terapeut, '2026-11-02T16:30')
+            ->assertSessionHasErrors('vreme');
+        $this->zakazi($this->pacijent, $this->terapeut, '2026-11-02T16:00')
             ->assertSessionHasNoErrors();
 
         $this->assertDatabaseCount('termin', 1);

@@ -75,7 +75,30 @@ class PacijentController extends Controller
             return redirect()->route('pacijent.termini')->withErrors('Pacijent not logged in.');
         }
 
-        $vreme = Carbon::parse($request->vreme);
+        $vremenskaZona = config('ordinacija.vremenska_zona');
+        $vreme = Carbon::parse($request->vreme, $vremenskaZona);
+
+        if ($vreme->lessThanOrEqualTo(now($vremenskaZona))) {
+            return redirect()->route('pacijent.termini')
+                ->withErrors(['vreme' => 'Termin ne može da se zakaže u prošlosti.'])
+                ->withInput();
+        }
+
+        $otvara = config('ordinacija.otvara');
+        $zatvara = config('ordinacija.zatvara');
+        $pocetakUMinutima = $vreme->hour * 60 + $vreme->minute;
+
+        if ($pocetakUMinutima < $otvara * 60 || $pocetakUMinutima + Termin::TRAJANJE_MINUTA > $zatvara * 60) {
+            return redirect()->route('pacijent.termini')
+                ->withErrors(['vreme' => sprintf(
+                    'Ordinacija radi od %02d:00 do %02d:00, a tretman traje 1h. Izaberite početak između %02d:00 i %02d:00.',
+                    $otvara,
+                    $zatvara,
+                    $otvara,
+                    $zatvara - 1
+                )])
+                ->withInput();
+        }
 
         $greska = DB::transaction(function () use ($request, $pacijentId, $vreme) {
             Terapeut::whereKey($request->terapeut_id)->lockForUpdate()->first();

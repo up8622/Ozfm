@@ -74,7 +74,8 @@
                     @csrf
                     <div class="mb-4">
                         <label for="vreme" class="mb-1.5 block text-[11px] font-semibold uppercase tracking-wide text-gray-600">Vreme</label>
-                        <input type="datetime-local" id="vreme" name="vreme" value="{{ old('vreme') }}" class="block w-full rounded-md border-gray-200 px-3 py-2 text-sm shadow-none focus:border-sky-500 focus:ring-sky-500" required>
+                        <input type="datetime-local" id="vreme" name="vreme" value="{{ old('vreme') }}" min="{{ now(config('ordinacija.vremenska_zona'))->format('Y-m-d\TH:i') }}" class="block w-full rounded-md border-gray-200 px-3 py-2 text-sm shadow-none focus:border-sky-500 focus:ring-sky-500" required>
+                        <p class="mt-1.5 text-xs text-gray-500">Radno vreme: {{ sprintf('%02d:00 - %02d:00', config('ordinacija.otvara'), config('ordinacija.zatvara')) }}, tretman traje 1h.</p>
                         @error('vreme')
                             <p class="mt-1.5 text-xs font-medium text-red-600">{{ $message }}</p>
                         @enderror
